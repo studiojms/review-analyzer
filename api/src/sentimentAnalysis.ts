@@ -1,22 +1,22 @@
-export interface SentimentAnalysis {
-  getSentimentAnalysis(text: string, apiKey: string): Promise<SentimentAnalysisResult>;
+export type SentimentAnalysisResult = {
+  sentiment?: string
 }
 
-export type SentimentAnalysisResult = {
-  sentiment?: string;
-};
+export interface SentimentAnalysis {
+  getSentimentAnalysis(text: string, apiKey: string): Promise<SentimentAnalysisResult>
+}
 
 export abstract class SentimentAnalysisBase implements SentimentAnalysis {
-  abstract get apiKey(): string;
+  abstract get apiKey(): string
 
-  abstract getSentimentAnalysis(text: string | string[]): Promise<SentimentAnalysisResult>;
+  abstract getSentimentAnalysis(text: string | string[]): Promise<SentimentAnalysisResult>
 
   async analyzeComments(comments: string[]) {
-    const sentimentScores = [];
+    const sentimentScores = []
     for (const comment of comments) {
-      const score = await this.getSentimentAnalysis(comment);
-      sentimentScores.push(score);
+      const score = await this.getSentimentAnalysis(comment)
+      sentimentScores.push(score)
     }
-    return sentimentScores;
+    return sentimentScores
   }
 }
