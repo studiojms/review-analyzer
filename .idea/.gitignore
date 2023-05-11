@@ -2,3 +2,7 @@
 .env
 # WebStorm
 .idea/
+# MacOS file
+.DS_Store
+# npm packages
+api/node_modules/
