@@ -1,5 +1,26 @@
 import { CSVRow, parseCSV } from './csvParser';
-import { MonkeyLearnSentimentAnalysis } from './monkeyLearnSentimentAnalysis';
+import { MonkeyLearnSentimentAnalysis } from './analisysImpl/monkeyLearnSentimentAnalysis';
+import { OpenAiSentimentAnalysis } from './analisysImpl/openAiSentimentAnalysis';
+import { ChatGptSentimentAnalysis } from './analisysImpl/chatGptSentimentAnalysis';
+
+enum SentimentAnalysisType {
+  OpenAi = 'openai',
+  ChatGpt = 'chatgpt',
+  MonkeyLearn = 'monkeylearn',
+}
+
+function sentimentAnalysisStrategy(type: SentimentAnalysisType) {
+  switch (type) {
+    case SentimentAnalysisType.OpenAi:
+      return new OpenAiSentimentAnalysis();
+    case SentimentAnalysisType.ChatGpt:
+      return new ChatGptSentimentAnalysis();
+    case SentimentAnalysisType.MonkeyLearn:
+      return new MonkeyLearnSentimentAnalysis();
+    default:
+      throw new Error('Invalid sentiment analysis type');
+  }
+}
 
 async function main() {
   try {
@@ -11,10 +32,12 @@ async function main() {
     console.log(reviews);
     console.log('=================================');
 
+    const analysisProcessor = sentimentAnalysisStrategy(SentimentAnalysisType.ChatGpt);
+
     for (const review of reviews.slice(0, 5)) {
-      const analysis = await new MonkeyLearnSentimentAnalysis().getSentimentAnalysis(review);
+      const analysis = await analysisProcessor.getSentimentAnalysis(review);
       console.log('Review: ', review);
-      console.log('Analysis: ', analysis);
+      console.log('Analysis: ', analysis.sentiment);
     }
   } catch (err) {
     console.error(err);

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import { SentimentAnalysisBase } from './sentimentAnalysis';
-import config from './config';
+import { SentimentAnalysisBase, SentimentAnalysisResult } from '../sentimentAnalysis';
+import config from '../config';
 
 export class MonkeyLearnSentimentAnalysis extends SentimentAnalysisBase {
   constructor(readonly modelId = 'cl_pi3C7JiL') {
@@ -13,7 +13,7 @@ export class MonkeyLearnSentimentAnalysis extends SentimentAnalysisBase {
     return config.MonkeyLearnApiKey;
   }
 
-  async getSentimentAnalysis(text: string | string[]) {
+  async getSentimentAnalysis(text: string | string[]): Promise<SentimentAnalysisResult> {
     const url = `https://api.monkeylearn.com/v3/classifiers/${this.modelId}/classify/`;
     const data = {
       data: Array.isArray(text) ? text : [text],
@@ -26,6 +26,6 @@ export class MonkeyLearnSentimentAnalysis extends SentimentAnalysisBase {
       },
     });
     const result = await response.data;
-    return result[0].classifications[0].tag_name;
+    return { sentiment: result[0].classifications[0].tag_name };
   }
 }

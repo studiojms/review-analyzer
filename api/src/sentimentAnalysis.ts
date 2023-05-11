@@ -2,8 +2,8 @@ export interface SentimentAnalysis {
   getSentimentAnalysis(text: string, apiKey: string): Promise<SentimentAnalysisResult>;
 }
 
-type SentimentAnalysisResult = {
-  sentiment: string;
+export type SentimentAnalysisResult = {
+  sentiment?: string;
 };
 
 export abstract class SentimentAnalysisBase implements SentimentAnalysis {
